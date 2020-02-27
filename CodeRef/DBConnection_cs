@@ -1,0 +1,11 @@
+internal static class DBConnection
+    {
+        private static string connectionString =
+            @"Data Source=localhost;Initial Catalog=BicycleDB_AM;Integrated Security=True";
+
+        public static SqlConnection GetConnection()
+        {
+            var conn = new SqlConnection(connectionString);
+            return conn;
+        }
+    }

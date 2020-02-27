@@ -1,0 +1,47 @@
+﻿<Window x:Class="PresentationLayer.frmEditVolOpp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PresentationLayer"
+        mc:Ignorable="d"
+        Title="Edit Volunteer Opprotunity" 
+        WindowStartupLocation="CenterScreen"
+        Height="425" Width="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+            <!--<ColumnDefinition Width="150"></ColumnDefinition>-->
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="Row1" Height="75"></RowDefinition>
+            <RowDefinition x:Name="Row2" Height="35"></RowDefinition>
+            <RowDefinition x:Name="Row3" Height="35"></RowDefinition>
+            <RowDefinition x:Name="Row4" Height="35"></RowDefinition>
+            <RowDefinition x:Name="Row5" Height="35"></RowDefinition>
+            <RowDefinition x:Name="Row6" Height="140"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="lblVolOppName" Content="Volunteer Opp Name" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Right" Height="25" Width="130"/>
+        <Label x:Name="lblEventDate" Content="Date" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="2" VerticalAlignment="Top" HorizontalContentAlignment="Right" Height="25" Width="91"/>
+        <Label x:Name="lblEventLocation" Content="Location" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="3" VerticalAlignment="Top" HorizontalContentAlignment="Right" Height="25" Width="91"/>
+        <Label x:Name="lblEventOrganizer" Content="Organizer" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="4" VerticalAlignment="Top" HorizontalContentAlignment="Right" Height="25" Width="91"/>
+        <Label x:Name="lblEventDescription" Content="Description" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="5" VerticalAlignment="Top" HorizontalContentAlignment="Right" Height="25" Width="91"/>
+        <TextBox Background="LightGray" IsReadOnly="True" x:Name="txtEditVolOppName" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="65,7,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="181"/>
+        <TextBox Background="LightGray" IsReadOnly="True" x:Name="txtEditVolOppLocation" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="65,7,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="181"/>
+        <TextBox Background="LightGray" IsReadOnly="True" x:Name="txtEditVolOppOrganizer" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="65,7,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="181"/>
+        <TextBox Background="LightGray" IsReadOnly="True" x:Name="txtEditVolOppDescription" Grid.Column="1" HorizontalAlignment="Left" Height="65" Margin="65,10,0,0" Grid.Row="5" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="181"/>
+        <TextBox Background="LightGray" IsReadOnly="True" x:Name="txtEditVolOppDate" Grid.Column="1" HorizontalAlignment="Left" Height="81" Margin="65,10,0,0" Grid.Row="2" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="181"/>
+        <!--<DatePicker x:Name="dpEditVolOppDate" Grid.Column="1" HorizontalAlignment="Left" Margin="65,6,0,0" Grid.Row="2" VerticalAlignment="Top" Width="181"/>-->
+        <Label Content="Required" Visibility="Hidden" Grid.Column="1" HorizontalAlignment="Left" Margin="264,7,-30,0" Grid.Row="1" VerticalAlignment="Top" Width="67" Height="23" Foreground="#FFF90404"/>
+        <Label Content="Required" Visibility="Hidden" Grid.Column="1" HorizontalAlignment="Left" Margin="264,7,-30,0" Grid.Row="2" VerticalAlignment="Top" Width="67" Height="23" Foreground="#FFF90404"/>
+        <Label Content="Required" Visibility="Hidden" Grid.Column="1" HorizontalAlignment="Left" Margin="264,7,-30,0" Grid.Row="3" VerticalAlignment="Top" Width="67" Height="23" Foreground="#FFF90404"/>
+        <Label Content="Required" Visibility="Hidden" Grid.Column="1" HorizontalAlignment="Left" Margin="264,7,-30,0" Grid.Row="4" VerticalAlignment="Top" Width="67" Height="23" Foreground="#FFF90404"/>
+        <Label Content="Required" Visibility="Hidden" Grid.Column="1" HorizontalAlignment="Left" Margin="264,7,-30,0" Grid.Row="5" VerticalAlignment="Top" Width="67" Height="23" Foreground="#FFF90404"/>
+        <Button x:Name="btn_VolOpp_Save" Visibility="Hidden" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Margin="160,90,0,-22" Grid.Row="5" VerticalAlignment="Top" Width="86" Height="33" Click="btn_VolOpp_Save_Click"   />
+        <Button x:Name="btn_VolOpp_Edit" Visibility="Visible" Content="Edit" Grid.Column="1" HorizontalAlignment="Left" Margin="65,90,0,-22" Grid.Row="5" VerticalAlignment="Top" Width="86" Height="33" Click="btn_VolOpp_Edit_Click"  />
+        <TextBox x:Name="editOppId" Visibility="Hidden" HorizontalAlignment="Left" Height="23" Margin="21,90,0,0" Grid.Row="5" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Button Visibility="Hidden" x:Name="btnSignUp" Content="Sign Up" Grid.Column="1" HorizontalAlignment="Left" Margin="65,128,0,-18" Grid.Row="5" VerticalAlignment="Top" Width="86" Height="31" Click="btnSignUp_Click"/>
+    </Grid>
+</Window>

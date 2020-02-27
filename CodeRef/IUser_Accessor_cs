@@ -1,0 +1,28 @@
+using DataObjects;
+using System.Collections.Generic;
+
+namespace DataAccessLayer
+{
+    public interface IUserAccessor
+    {
+        User AuthenticateUser(string username, string passwordHash);
+
+        bool UpdatePasswordHash(int employeeID, string oldPasswordHash,
+            string newPasswordHash);
+
+        List<User> SelectUsersByActive(bool active = true);
+
+        int UpdateEmployee(User oldUser, User newUser);
+
+        int InsertEmployee(User user);
+
+        int ActivateEmployee(int employeeID);
+        int DeactivateEmployee(int employeeID);
+
+        List<string> SelectAllRoles();
+
+        List<string> SelectRolesByEmployeeID(int employeeID);
+
+        int InsertOrDeleteEmployeeRole(int employeeID, string role, bool delete=false);
+    }
+}

@@ -1,0 +1,238 @@
+using DataObjects;
+using LogicLayer;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WpfPresentationLayer
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private User _user = null;
+
+        private IUserManager _userManager;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            _userManager = new UserManager();
+        }
+
+        private void BtnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            var email = txtEmail.Text;
+            var password = pwdPassword.Password;
+
+            if (btnLogin.Content.ToString() == "Logout")
+            {
+                logoutUser();
+                return;
+            }
+
+            if (email.Length < 7 || password.Length < 7)
+            {
+                MessageBox.Show("Bad username or password.",
+                    "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                txtEmail.Text = "";
+                pwdPassword.Password = "";
+                txtEmail.Focus();
+                return;
+            }
+            // try to login
+            try
+            {
+                _user = _userManager.AuthenticateUser(email, password);
+                string roles = "";
+                for (int i = 0; i < _user.Roles.Count; i++)
+                {
+                    roles += _user.Roles[i];
+                    if (i < _user.Roles.Count - 1)
+                    {
+                        roles += ", ";
+                    }
+                }
+
+                string message = "Welcome, " + _user.FirstName
+                    + ".: You are logged in as: " + roles;
+
+                lblStatusMessage.Content = message;
+
+                if (pwdPassword.Password == "newuser")
+                {
+                    var updatePassword = new frmUpdatePassword(_user, _userManager);
+                    if (updatePassword.ShowDialog() == false)
+                    {
+                        // code to logout the user
+                        logoutUser();
+                        MessageBox.Show("You must change your password to continue.");
+                        return;
+                    }
+                }
+
+                // reset the login
+                btnLogin.Content = "Logout";
+                txtEmail.Text = "";
+                pwdPassword.Password = "";
+                txtEmail.IsEnabled = false;
+                pwdPassword.IsEnabled = false;
+                txtEmail.Visibility = Visibility.Hidden;
+                pwdPassword.Visibility = Visibility.Hidden;
+                lblEmail.Visibility = Visibility.Hidden;
+                lblPassword.Visibility = Visibility.Hidden;
+                showUserTabs();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n"
+                    + ex.InnerException.Message,
+                    "Login Failed",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void logoutUser()
+        {
+            _user = null;
+            lblStatusMessage.Content = "You are not logged in. Please login to continue.";
+
+            // reset the login
+            btnLogin.Content = "Login";
+            txtEmail.Text = "";
+            pwdPassword.Password = "";
+            txtEmail.IsEnabled = true;
+            pwdPassword.IsEnabled = true;
+            txtEmail.Visibility = Visibility.Visible;
+            pwdPassword.Visibility = Visibility.Visible;
+            lblEmail.Visibility = Visibility.Visible;
+            lblPassword.Visibility = Visibility.Visible;
+            hideAllUserTabs();
+            return;
+        }
+
+        private void hideAllUserTabs()
+        {
+            foreach (TabItem item in tabsetMain.Items)
+            {
+                item.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            hideAllUserTabs();
+        }
+
+        private void showUserTabs()
+        {
+            foreach (var r in _user.Roles)
+            {
+                switch (r)
+                {
+                    case "Administrator":
+                        tabAdmin.Visibility = Visibility.Visible;
+                        tabAdmin.IsSelected = true;
+                        break;
+                    case "Manager":
+                        tabInventory.Visibility = Visibility.Visible;
+                        tabInventory.IsSelected = true;
+                        break;
+                    case "Rental":
+                        tabRental.Visibility = Visibility.Visible;
+                        tabRental.IsSelected = true;
+                        break;
+                    case "CheckOut":
+                        tabCheckout.Visibility = Visibility.Visible;
+                        tabCheckout.IsSelected = true;
+                        break;
+                    case "Inspection":
+                        tabInspection.Visibility = Visibility.Visible;
+                        tabInspection.IsSelected = true;
+                        break;
+                    case "Prep":
+                        tabPrep.Visibility = Visibility.Visible;
+                        tabPrep.IsSelected = true;
+                        break;
+                    case "Maintenance":
+                        tabMaintenance.Visibility = Visibility.Visible;
+                        tabMaintenance.IsSelected = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void TabAdmin_GotFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (dgUserList.ItemsSource == null)
+                {
+                    dgUserList.ItemsSource = _userManager.RetrieveUserListByActive();
+
+                    dgUserList.Columns.Remove(dgUserList.Columns[6]);
+                    dgUserList.Columns.Remove(dgUserList.Columns[5]);
+
+                    dgUserList.Columns[0].Header = "Employee ID";
+                    dgUserList.Columns[1].Header = "Given Name";
+                    dgUserList.Columns[2].Header = "Family Name";
+                    dgUserList.Columns[3].Header = "Email Address";
+                    dgUserList.Columns[4].Header = "Phone Number";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.InnerException.Message);
+            }
+        }
+
+        private void DgUserList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            User selectedUser = (User)dgUserList.SelectedItem;
+
+            // MessageBox.Show("You selected " + selectedUser.FirstName);
+            var userWindow = new frmUser(selectedUser, _userManager);
+            if(userWindow.ShowDialog() == true)
+            {
+                refreshUserList();
+            }
+        }
+
+        private void refreshUserList()
+        {
+            dgUserList.ItemsSource = 
+                _userManager.RetrieveUserListByActive((bool)chkActive.IsChecked);
+            dgUserList.Columns.RemoveAt(6);
+            dgUserList.Columns.RemoveAt(5);
+        }
+
+        private void BtnAddUser_Click(object sender, RoutedEventArgs e)
+        {
+            var userWindow = new frmUser(_userManager);
+            if (userWindow.ShowDialog() == true)
+            {
+                refreshUserList();
+            }
+        }
+
+        private void ChkActive_Click(object sender, RoutedEventArgs e)
+        {
+            refreshUserList();
+        }
+    }
+}
+
